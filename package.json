@@ -1,0 +1,27 @@
+{
+  "name": "project-bloggroup22",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iqra3786/project-blogGroup22.git"
+  },
+  "author": "group-22",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iqra3786/project-blogGroup22/issues"
+  },
+  "homepage": "https://github.com/iqra3786/project-blogGroup22#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
+    "mongoose": "^6.7.2",
+    "nodemon": "^2.0.20"
+  }
+}
