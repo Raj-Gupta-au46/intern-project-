@@ -1,8 +1,10 @@
 const validation= require("../validator/validation")
-
 const collegeModel = require("../models/collegeModel")
-
 const  {isEmpty, isValidName,}= validation
+
+
+//....................................................... Post Api For College Details ...........................................................
+
 
 const createCollege= async function(req,res){
     try{

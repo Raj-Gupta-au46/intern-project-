@@ -1,11 +1,10 @@
-
-
-
 const internModel= require('../Models/internModel')
 const collegeModel = require("../models/collegeModel")
 const validation= require("../validator/validation")
-
 const  {isEmpty, isValidName,isValidMobile,isValidEmail,isValidObjectId} = validation
+
+
+//....................................................... Post Api For Internship Application ...........................................................
 
 const applyIntern= async function (req, res){
     try{
@@ -67,9 +66,7 @@ const applyIntern= async function (req, res){
 }
 
 
-
-
-
+//....................................................... Get Api For Fetching Internship's Applications ...........................................................
 
 
 const getInternDetails= async function (req, res){
