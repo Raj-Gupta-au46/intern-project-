@@ -3,6 +3,10 @@ const internModel= require('../Models/internModel')
 
 const applyIntern= async function (req, res){
     try{
+        let details= req.body
+        if(Object.keys(details).length==0){
+            res.status(400).send({status:false,message:"Please Enter "})
+        }
 
     }
     catch(error){
