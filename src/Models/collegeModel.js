@@ -18,4 +18,4 @@ const collegeSchema= new mongoose.Schema({
 }, {timestamps:true})
 
 
-module.exports= mongoose.model('college', collegeSchema)
+module.exports= mongoose.model('College', collegeSchema)

@@ -14,9 +14,9 @@ const internSchema= new mongoose.Schema({
         unique:true,
         trim:true},
 
-    collegeId:{type:String,
+    collegeId:{type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:"college"},
+        ref:"College"},
 
     isDeleted:{type:Boolean,
         default:false}
@@ -24,4 +24,4 @@ const internSchema= new mongoose.Schema({
 }, {timestamps:true})
 
 
-module.exports= mongoose.model('intern', internSchema)
+module.exports= mongoose.model('Intern', internSchema)
