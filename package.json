@@ -1,22 +1,17 @@
 {
-  "name": "project-bloggroup22",
+  "name": "project-internshipgroup11",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iqra3786/project-blogGroup22.git"
-  },
-  "author": "group-22",
+ 
+  "author": "group-11",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/iqra3786/project-blogGroup22/issues"
-  },
-  "homepage": "https://github.com/iqra3786/project-blogGroup22#readme",
+  
+  
   "dependencies": {
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
