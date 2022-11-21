@@ -1,59 +1,65 @@
+
+
+
 const internModel= require('../Models/internModel')
-const validation = require('../Validator/validation')
+const collegeModel = require("../models/collegeModel")
+const validation= require("../validator/validation")
 
-
+const  {isEmpty, isValidName,isValidMobile,isValidEmail,isValidObjectId} = validation
 
 const applyIntern= async function (req, res){
     try{
         let details= req.body
-        let enter
         if(Object.keys(details).length==0){
-            return res.status(400).send({status:false,message:"Please enter the body in request."})
+            res.status(400).send({status:false,message:"Please enter the details in request."})
         }
-        let{name, email, mobile, collegeId, isDeleted}= details
+        const{name,email,mobile,collegeName}=details
         if(!name){
-            return res.status(400).send({status:false, message: "Please provide name in the body"})
+            return res.status(400).send({status:false,message:"name is required"})
         }
         if(!email){
-            res.status(400).send({status:false, message: "Please provide email in the body"})
+            return res.status(400).send({status:false,message:"email is required"})
         }
         if(!mobile){
-            return res.status(400).send({status:false, message: "Please provide mobile number in the body"})
+            return res.status(400).send({status:false,message:"mobile is required"})
         }
-        if(!collegeId){
-            return res.status(400).send({status:false, message: "Please provide collegeId in the body"})
+        if(!collegeName){
+            return res.status(400).send({status:false,message:"collegeName is required"})
+        }
+        if(!isEmpty(name)){
+            return res.status(400).send({status:false,message:"name is can't be empty"})
+        }
+        if(!isEmpty(email)){
+            return res.status(400).send({status:false,message:"eamil is can't be empty"})
+        }
+        if(!isEmpty(mobile)){
+            return res.status(400).send({status:false,message:"mobile is can't be empty"})
+        }
+        if(!isEmpty(collegeName)){
+            return res.status(400).send({status:false,message:"collegeName is can't be empty"})
         }
         
+        if(!isValidEmail(email)){
+            return res.status(400).send({status:false,message:"please enter valid email"})
+        }
+        if(!isValidMobile(mobile)){
+            return res.status(400).send({status:false,message:"please enter valid mobile"})
+        }
         
+       let findIntern= await internModel.findOne({$or:[{email:email},{mobile:mobile}]})
+       if(findIntern){
+        return res.status(400).send({status:false,message:"intern already exist"})
+       }
+       let findCollege= await collegeModel.findOne({$or:[{name:collegeName},{fullName:collegeName}]},{isDleted:false})
+       if(!findCollege){
+        return res.status(400).send({status:false,message:"college not found"})
+       }
+       delete req.body["collegeName"]
 
-        
+       req.body.collegeId=findCollege._id
 
-        if(!validation.isValidEmail(email)){
-            return res.status(400).send({status:false, message:"Please provide a valid email in the request body eg. pass@123."})
-        }
-        if(!validation.isValidMobile(mobile)){
-            return res.status(400).send({status:false, message:"Please provide a valid mobile number in the request body eg. 9987654987."})
-        }
-        if(isDeleted==true){
-            return res.status(400).send({status:false, message:"you can not delete a document at the time of creation."})
-        }
-
-        
-        
-            
-            
-            
-        
-         enter= await internModel.create({name:name, email:email, mobile:mobile, collegeId: collegeId})
-         console.log(enter)
-        if(Object.keys(enter).length==0){
-            return res.status(400).send({status:false, message:"can not create this document."})
-        }
-    else{
-        return res.status(201).send({status:true, data:enter})
-    }
-
-
+       let createdIntern= await internModel.create(details)
+       return res.status(201).send({status:false,data:createdIntern})
     }
     catch(error){
         res.status(500).send({status:false, message: error.message})
@@ -63,8 +69,26 @@ const applyIntern= async function (req, res){
 
 
 
+
+
+
 const getInternDetails= async function (req, res){
     try{
+        const filter = req.query
+        if(filter.collegeName && Object.keys(filter).length === 1){
+            const checkCollege = await collegeModel.findOne ({ name: filter.collegeName})
+            if (!checkCollege) return res.status(404).send({ status: false, message: "collegeName not found"})
+
+            const { name, fullName, logoLink} = checkCollege
+
+            const interns = await internModel.find({ collegeId: checkCollege._id}).select({name: 1, email: 1, mobile: 1})
+
+            if(internModel.length === 0) return res.status(404).send({status: false, message: "no intern are there"})
+
+            const data ={ name,fullName, logoLink ,interns}
+            return res.status(200).send({status: true, count: interns.length, data: data})
+         }
+         return res.status(400).send({status: false, message: "Please provide filter and it should be collegeName only"})
 
     }
     catch(error){
