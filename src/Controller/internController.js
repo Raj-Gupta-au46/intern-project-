@@ -1,10 +1,11 @@
 const internModel= require('../Models/internModel')
 const collegeModel = require("../models/collegeModel")
 const validation= require("../validator/validation")
-const  {isEmpty, isValidName,isValidMobile,isValidEmail,isValidObjectId} = validation
+
+const  {isEmpty, isValidName,isValidMobile,isValidEmail} = validation
 
 
-//....................................................... Post Api For Internship Application ...........................................................
+//..............................Post Api For Internship Application ...........................................................
 
 const applyIntern= async function (req, res){
     try{
@@ -12,7 +13,9 @@ const applyIntern= async function (req, res){
         if(Object.keys(details).length==0){
             res.status(400).send({status:false,message:"Please enter the details in request."})
         }
-        const{name,email,mobile,collegeName}=details
+        let{name,email,mobile,collegeName}=details
+        details.collegeName=collegeName.toLowerCase()
+        collegeName=details.collegeName
         if(!name){
             return res.status(400).send({status:false,message:"name is required"})
         }
@@ -37,7 +40,9 @@ const applyIntern= async function (req, res){
         if(!isEmpty(collegeName)){
             return res.status(400).send({status:false,message:"collegeName is can't be empty"})
         }
-        
+        if(!isValidName(name)){
+            return res.status(400).send({status:false,message:"please enter valid name"})
+        }
         if(!isValidEmail(email)){
             return res.status(400).send({status:false,message:"please enter valid email"})
         }
@@ -49,16 +54,16 @@ const applyIntern= async function (req, res){
        if(findIntern){
         return res.status(400).send({status:false,message:"intern already exist"})
        }
-       let findCollege= await collegeModel.findOne({$or:[{name:collegeName},{fullName:collegeName}]},{isDleted:false})
+       let findCollege= await collegeModel.findOne({$or:[{name:collegeName},{fullName:collegeName}]},{isDeleted:false})
        if(!findCollege){
         return res.status(400).send({status:false,message:"college not found"})
        }
-       delete req.body["collegeName"]
+       //delete req.body["collegeName"]
 
        req.body.collegeId=findCollege._id
 
        let createdIntern= await internModel.create(details)
-       return res.status(201).send({status:false,data:createdIntern})
+       return res.status(201).send({status:true,data:createdIntern})
     }
     catch(error){
         res.status(500).send({status:false, message: error.message})
@@ -66,23 +71,24 @@ const applyIntern= async function (req, res){
 }
 
 
-//....................................................... Get Api For Fetching Internship's Applications ...........................................................
+//................................ Get Api for college details with query params ...........................................................
 
 
-const getInternDetails= async function (req, res){
+const collegeDetails= async function (req, res){
     try{
         const filter = req.query
         if(filter.collegeName && Object.keys(filter).length === 1){
-            const checkCollege = await collegeModel.findOne ({ name: filter.collegeName})
+            const checkCollege = await collegeModel.findOne ({ name: filter.collegeName.toLowerCase()})
             if (!checkCollege) return res.status(404).send({ status: false, message: "collegeName not found"})
 
             const { name, fullName, logoLink} = checkCollege
 
-            const interns = await internModel.find({ collegeId: checkCollege._id}).select({name: 1, email: 1, mobile: 1})
+            const interns = await internModel.find({ collegeId: checkCollege._id}).select({name: 1,email: 1 , mobile: 1})
 
-            if(internModel.length === 0) return res.status(404).send({status: false, message: "no intern are there"})
+            if(interns.length == 0) return res.status(404).send({status: false, message: "no intern are there"})
 
             const data ={ name,fullName, logoLink ,interns}
+        
             return res.status(200).send({status: true, count: interns.length, data: data})
          }
          return res.status(400).send({status: false, message: "Please provide filter and it should be collegeName only"})
@@ -94,7 +100,7 @@ const getInternDetails= async function (req, res){
 }
 
 
-module.exports.getInternDetails= getInternDetails
+module.exports.collegeDetails= collegeDetails
 module.exports.applyIntern=applyIntern
 
 

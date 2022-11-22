@@ -3,7 +3,7 @@ const collegeModel = require("../models/collegeModel")
 const  {isEmpty, isValidName,}= validation
 
 
-//....................................................... Post Api For College Details ...........................................................
+//.....................................Post Api For College  ........................................
 
 
 const createCollege= async function(req,res){
@@ -13,9 +13,10 @@ const createCollege= async function(req,res){
    return res.status(400).send({status:false,message:"data is not present"})
    }
    const{name,fullName,logoLink}=data
+   data.name=name.toLowerCase()
    if(!name){
    return res.status(400).send({status:false,message:"name is required"})
-   }
+   }  
    if(!fullName){
    return res.status(400).send({status:false,message:"fullName is required"})
    }
