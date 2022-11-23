@@ -130,4 +130,3 @@ Refer below sample
 
 
 
-////delete req.body["collegeName"]
