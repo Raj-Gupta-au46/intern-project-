@@ -19,7 +19,7 @@ router.post('/functionup/interns', internController.applyIntern)
 //.......................................... Get Api For College Details ........................................................
 
 
-router.get('/functionup/collegeDetails', internController.collegeDetails)
+router.get('/functionup/collegeDetails', collegeController.collegeDetails)
 
 
 
