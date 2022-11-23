@@ -14,8 +14,7 @@ const applyIntern= async function (req, res){
             res.status(400).send({status:false,message:"Please enter the details in request."})
         }
         let{name,email,mobile,collegeName}=details
-        details.collegeName=collegeName.toLowerCase()
-        collegeName=details.collegeName
+       
         if(!name){
             return res.status(400).send({status:false,message:"name is required"})
         }
@@ -28,6 +27,9 @@ const applyIntern= async function (req, res){
         if(!collegeName){
             return res.status(400).send({status:false,message:"collegeName is required"})
         }
+        details.collegeName=collegeName.toLowerCase()
+        collegeName=details.collegeName
+        
         if(!isEmpty(name)){
             return res.status(400).send({status:false,message:"name is can't be empty"})
         }
@@ -56,9 +58,9 @@ const applyIntern= async function (req, res){
        }
        let findCollege= await collegeModel.findOne({$or:[{name:collegeName},{fullName:collegeName}]},{isDeleted:false})
        if(!findCollege){
-        return res.status(400).send({status:false,message:"college not found"})
+        return res.status(404).send({status:false,message:"college not found"})
        }
-       //delete req.body["collegeName"]
+       
 
        req.body.collegeId=findCollege._id
 
@@ -78,7 +80,7 @@ const collegeDetails= async function (req, res){
     try{
         const filter = req.query
         if(filter.collegeName && Object.keys(filter).length === 1){
-            const checkCollege = await collegeModel.findOne ({ name: filter.collegeName.toLowerCase()})
+            let checkCollege = await collegeModel.findOne ({ name: filter.collegeName.toLowerCase()})
             if (!checkCollege) return res.status(404).send({ status: false, message: "collegeName not found"})
 
             const { name, fullName, logoLink} = checkCollege
@@ -112,7 +114,10 @@ module.exports.applyIntern=applyIntern
 
 
 
-
+//if(details.collegeName=collegeName.toLowerCase()){
+//     return res.status(400).send({status:false,message:"collegeName should be in lowercase "})
+// }
+// collegeName=details.collegeName
 
 
 

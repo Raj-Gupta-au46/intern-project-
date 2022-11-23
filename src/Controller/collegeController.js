@@ -1,6 +1,6 @@
 const validation= require("../validator/validation")
 const collegeModel = require("../models/collegeModel")
-const  {isEmpty, isValidName,}= validation
+const  {isEmpty, isValidName}= validation
 
 
 //.....................................Post Api For College  ........................................
@@ -13,10 +13,11 @@ const createCollege= async function(req,res){
    return res.status(400).send({status:false,message:"data is not present"})
    }
    const{name,fullName,logoLink}=data
-   data.name=name.toLowerCase()
+   
    if(!name){
-   return res.status(400).send({status:false,message:"name is required"})
+      return res.status(400).send({status:false,message:"name is required"})
    }  
+   data.name=name.toLowerCase()
    if(!fullName){
    return res.status(400).send({status:false,message:"fullName is required"})
    }
@@ -32,7 +33,10 @@ const createCollege= async function(req,res){
      if(!isEmpty(fullName)){
         return res.status(400).send({status:false,message:"fullName can't be empty"})
      }   
-     
+    let findCollege= await collegeModel.findOne({name:name})
+    if(findCollege){  
+      return res.status(400).send({status:false,message:"college is already present "})
+    }
    
    let collegeCreated= await collegeModel.create(data)
    return res.status(201).send({status:true,data:collegeCreated})
@@ -49,6 +53,18 @@ module.exports.createCollege=createCollege
 
 
 
+
+
+
+
+
+
+
+
+//if(data.name=name.toLowerCase()){
+//    return res.status(400).send({status:false,message:"name should be in lower case"})
+// }
+//
 
 
 
