@@ -31,16 +31,16 @@ const applyIntern= async function (req, res){
         collegeName=details.collegeName
         
         if(!isEmpty(name)){
-            return res.status(400).send({status:false,message:"name is can't be empty"})
+            return res.status(400).send({status:false,message:"name can't be empty"})
         }
         if(!isEmpty(email)){
-            return res.status(400).send({status:false,message:"eamil is can't be empty"})
+            return res.status(400).send({status:false,message:"eamil  can't be empty"})
         }
         if(!isEmpty(mobile)){
-            return res.status(400).send({status:false,message:"mobile is can't be empty"})
+            return res.status(400).send({status:false,message:"mobile can't be empty"})
         }
         if(!isEmpty(collegeName)){
-            return res.status(400).send({status:false,message:"collegeName is can't be empty"})
+            return res.status(400).send({status:false,message:"collegeName  can't be empty"})
         }
         if(!isValidName(name)){
             return res.status(400).send({status:false,message:"please enter valid name"})

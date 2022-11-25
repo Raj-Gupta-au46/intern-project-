@@ -63,7 +63,7 @@ const collegeDetails= async function (req, res){
 
            const interns = await internModel.find({ collegeId: checkCollege._id}).select({name: 1,email: 1 , mobile: 1})
 
-           if(interns.length == 0) return res.status(404).send({status: false, message: "no intern are there"})
+           if(interns.length==0) return res.status(404).send({status: false, message: "no intern are there"})
 
            const data ={ name,fullName, logoLink ,interns}
        
@@ -82,3 +82,4 @@ module.exports.collegeDetails= collegeDetails
 module.exports.createCollege=createCollege
 
 
+ 
