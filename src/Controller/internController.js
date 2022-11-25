@@ -59,7 +59,7 @@ const applyIntern= async function (req, res){
        let findCollege= await collegeModel.findOne({$or:[{name:collegeName},{fullName:collegeName}]},{isDeleted:false})
        if(!findCollege){
         return res.status(404).send({status:false,message:"college not found"})
-       }
+       } 
        
        req.body.collegeId=findCollege._id
 
